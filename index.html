@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Kamera</title>
+</head>
+<body>
+    <h2>Silakan aktifkan kamera untuk membuka dokumen</h2>
+    <video id="video" width="400" height="300" autoplay></video>
+    <canvas id="canvas" width="400" height="300" style="display: none;"></canvas>
+    <br>
+    <button id="capture">Ambil Foto</button>
+    <button id="openPdf" disabled>Buka Dokumen</button>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('capture');
+        const openPdfButton = document.getElementById('openPdf');
+
+        // Aktifkan kamera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(error => {
+                alert('Akses kamera diperlukan untuk membuka dokumen.');
+            });
+
+        // Ambil Foto
+        captureButton.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/png');
+
+            // Kirim gambar ke server (jika perlu)
+            console.log("Foto diambil:", imageData);
+
+            // Aktifkan tombol untuk membuka PDF
+            openPdfButton.disabled = false;
+        });
+
+        // Buka PDF setelah verifikasi kamera
+        openPdfButton.addEventListener('click', () => {
+            window.location.href = 'https://drive.google.com/uc?export=download&id=1Y7-RKwDlUSgbGaP-hlJRO-_eWqUhptkF'; 
+        });
+    </script>
+</body>
+</html>
